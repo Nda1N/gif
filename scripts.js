@@ -26,11 +26,11 @@ const gifPaths = {
     ocean4: ['seaturtle_tb.gif', 'seaturtle_t.gif']
 };
 
-// 再生中のフラグと現在のGIFインデックス
+// GIF再生状態
 let isPlaying = false;
 let currentGifIndex = 0;
 
-// GIFを事前に読み込む関数
+// GIFを事前に読み込む
 const preloadGifs = () => {
     Object.values(gifPaths).forEach(paths => {
         paths.forEach(path => {
@@ -40,7 +40,7 @@ const preloadGifs = () => {
     });
 };
 
-// GIFを表示する関数
+// GIFを表示する
 function showPopupGif(gifPathsArray) {
     if (isPlaying) return;
 
@@ -56,12 +56,11 @@ function showPopupGif(gifPathsArray) {
     loadingCircle.style.display = 'block';
     gifPopup.style.display = 'none';
     markerBoundary.style.display = 'none'; // 赤枠を非表示
+    markerStatus.style.display = "block"; // マーカー検出中はそのまま表示
 
-    // GIFがロードされたら表示
     gif.onload = () => {
         loadingCircle.style.display = 'none';
         gifPopup.style.display = 'block';
-        markerStatus.style.display = "block";
     };
 
     gif.onerror = () => {
@@ -82,11 +81,10 @@ function showPopupGif(gifPathsArray) {
         isPlaying = false;
         markerBoundary.style.display = 'block'; // GIFを閉じたら赤枠を再表示
         tapHint.style.display = 'none'; // ヒント非表示
-        markerStatus.style.display = "none";
     });
 }
 
-// マーカーイベントを処理
+// マーカー検出時の処理
 document.querySelectorAll('a-marker').forEach(marker => {
     marker.addEventListener('markerFound', () => {
         if (isPlaying) return;
