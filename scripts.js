@@ -26,6 +26,24 @@ const gifPaths = {
     ocean4: ['seaturtle_tb.gif', 'seaturtle_t.gif']
 };
 
+// マーカー検出ステータスを更新する関数
+function updateMarkerStatus(show, isMarkerFound = false) {
+    if (isPlaying) return; // GIF再生中は表示しない
+
+    if (show) {
+        if (isMarkerFound) {
+            markerStatus.innerText = "マーカーを検出中...";
+            markerStatus.style.color = "green";
+        } else {
+            markerStatus.innerText = "マーカーが見つかりません";
+            markerStatus.style.color = "red";
+        }
+        markerStatus.style.display = "block";
+    } else {
+        markerStatus.style.display = "none";
+    }
+}
+
 // GIF再生状態
 let isPlaying = false;
 let currentGifIndex = 0;
