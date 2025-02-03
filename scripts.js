@@ -4,6 +4,7 @@ const popupGif = document.getElementById('popupGif');
 const closeButton = document.getElementById('closeButton');
 const tapHint = document.getElementById('tapHint');
 const markerStatus = document.getElementById('markerStatus');
+const markerBoundary = document.getElementById('markerBoundary'); // 赤枠
 
 // GIFのパスを指定
 const gifPaths = {
@@ -39,30 +40,6 @@ const preloadGifs = () => {
     });
 };
 
-// マーカー検出ステータスを更新する関数
-function updateMarkerStatus(show, isMarkerFound = false) {
-    if (isPlaying) return; // GIF再生中は表示しない
-
-    if (show) {
-        if (isMarkerFound) {
-            markerStatus.innerText = "マーカーを検出中...";
-            markerStatus.style.color = "green";
-        } else {
-            markerStatus.innerText = "マーカーが見つかりません";
-            markerStatus.style.color = "red";
-        }
-        markerStatus.style.display = "block";
-    } else {
-        markerStatus.style.display = "none";
-    }
-}
-
-// UIヒントを表示する関数
-function showTapHint() {
-    tapHint.style.display = 'block';
-    tapHint.classList.add('show');
-}
-
 // GIFを表示する関数
 function showPopupGif(gifPathsArray) {
     if (isPlaying) return;
@@ -73,17 +50,18 @@ function showPopupGif(gifPathsArray) {
 
     function playGif(index) {
         gif.src = gifPathsArray[index];
-        showTapHint();
+        tapHint.style.display = 'block'; // ヒント表示
     }
 
     loadingCircle.style.display = 'block';
     gifPopup.style.display = 'none';
+    markerBoundary.style.display = 'none'; // 赤枠を非表示
 
     // GIFがロードされたら表示
     gif.onload = () => {
         loadingCircle.style.display = 'none';
         gifPopup.style.display = 'block';
-        updateMarkerStatus(true, true); // GIF表示中はステータスを表示
+        markerStatus.style.display = "block";
     };
 
     gif.onerror = () => {
@@ -102,7 +80,9 @@ function showPopupGif(gifPathsArray) {
     closeButton.addEventListener('click', () => {
         gifPopup.style.display = 'none';
         isPlaying = false;
-        updateMarkerStatus(false); // ×ボタンを押したらステータス非表示
+        markerBoundary.style.display = 'block'; // GIFを閉じたら赤枠を再表示
+        tapHint.style.display = 'none'; // ヒント非表示
+        markerStatus.style.display = "none";
     });
 }
 
@@ -117,13 +97,11 @@ document.querySelectorAll('a-marker').forEach(marker => {
                 showPopupGif(gifPaths[markerId]);
             }, 1000);
         }
-
-        updateMarkerStatus(true, true);  // マーカーが見つかった時に緑色で表示
     });
 
     marker.addEventListener('markerLost', () => {
         if (!isPlaying) {
-            updateMarkerStatus(true, false);  // マーカーが見つからない場合は赤色で表示
+            markerBoundary.style.display = 'block'; // マーカーが消えたら赤枠を再表示
         }
     });
 });
@@ -131,5 +109,4 @@ document.querySelectorAll('a-marker').forEach(marker => {
 // ページロード時にGIFを事前ロード
 window.addEventListener('load', () => {
     preloadGifs();
-    updateMarkerStatus(false); // 初期状態は非表示
 });
