@@ -1,21 +1,21 @@
-/* 赤い正方形の枠のスタイル */
+/* 赤い正方形の枠 */
 #markerBoundary {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60vmin;  /* 幅と高さをvminで設定 */
+    width: 60vmin;  
     height: 60vmin;
-    border: 5px solid red;  /* 枠を赤に設定 */
-    background-color: transparent; /* 中は透明にする */
+    border: 5px solid red;
+    background-color: transparent;
     z-index: 999;
 }
 
+/* タップヒントを右側に移動 */
 #tapHint {
     position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50px;
+    right: 20px;  /* 右側に配置 */
     padding: 10px;
     background: rgba(0, 0, 0, 0.7);
     color: white;
@@ -25,6 +25,7 @@
     display: none;
 }
 
+/* GIF表示用ポップアップ */
 #gifPopup {
     position: fixed;
     top: 50%;
@@ -40,6 +41,7 @@
     border-radius: 10px;
 }
 
+/* 閉じるボタン */
 #closeButton {
     position: absolute;
     top: 5px;
@@ -53,6 +55,7 @@
     border-radius: 50%;
 }
 
+/* ローディング表示 */
 #loadingCircle {
     position: fixed;
     top: 50%;
